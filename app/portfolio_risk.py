@@ -14,7 +14,7 @@ def load_client_data():
     Loads all data from portfolios.xlsx. This represents the start of our report.
     """
     excel_dir = os.path.join(parent_dir, "data\portfolios.xlsx")
-    client_df = pd.read_excel(excel_dir, sheet_name= "Sheet1")
+    client_df = pd.read_excel(excel_dir, sheet_name="Sheet1")
     client_df = client_df.copy()
     client_df.set_index('id', inplace=True)
     return client_df
@@ -50,7 +50,7 @@ def calculate_hedge_ratio():
                 sum_asset_risk += client_df.loc[client_df['portfolio'] == pf, 'weighted risk'].values[0]
 
         if not sum_asset_risk == 0:
-            total_client_risk = -(sum_liab_risk)/(sum_asset_risk)
+            total_client_risk = -sum_liab_risk/sum_asset_risk
             client_risk_all[client] = total_client_risk
         elif sum_asset_risk == 0:
             client_risk_all[client] = 'No asset exists'
@@ -69,19 +69,19 @@ def _map_risk_data_for_all_pfs():
     deri_risk_dict = _get_risk_api(derivatives=True)
     fx_risk_dict = _get_risk_api(derivatives=False)
 
-    for pf, type in pf_type_dict.items():
-        if type == 'CashBalance':
+    for pf, scope in pf_type_dict.items():
+        if scope == 'CashBalance':
             risk_dict[pf] = 0
 
-        elif type == 'Liabilities':
+        elif scope == 'Liabilities':
             risk = liab_risk_dict[pf]
             risk_dict[pf] = risk
 
-        elif type == 'Bonds' or type == 'FixedIncome' or type == 'Exotics' or type == 'Hybrids':
+        elif scope == 'Bonds' or scope == 'FixedIncome' or scope == 'Exotics' or scope == 'Hybrids':
             risk = deri_risk_dict[pf]
             risk_dict[pf] = risk
 
-        elif type == 'FX':
+        elif scope == 'FX':
             risk = fx_risk_dict[pf]
             risk_dict[pf] = risk
 
@@ -107,7 +107,7 @@ def _read_liability_risks():
     return liab_risk_dict
 
 
-def _get_risk_api(derivatives:bool = True):
+def _get_risk_api(derivatives: bool = True):
     """
     Gets risks of either derivatives assets or FX from api and maps the risks to the portfolios.
     """
