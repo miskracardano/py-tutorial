@@ -19,7 +19,7 @@ def get_all() -> Dict[str, Any]:
 
 
 def get_portfolio(portfolio: str, date: dt.date) -> Dict[str, Any]:
-    sleep(10)
+    sleep(2)
     if not _is_request_valid(portfolio=portfolio, date=date):
         return parse_error(error=f'Invalid portfolio {portfolio} or date {date}.')
 
