@@ -4,12 +4,13 @@ import datetime as dt
 from pathlib import Path
 import os
 import pandas as pd
+from typing import Dict
 
 this_dir = Path(os.path.dirname(os.path.abspath(__file__)))
 parent_dir = this_dir.parent.absolute()
 
 
-def load_client_data():
+def load_client_data() -> pd.DataFrame:
     """
     Loads all data from portfolios.xlsx. This represents the start of our report.
     """
@@ -20,7 +21,7 @@ def load_client_data():
     return client_df
 
 
-def create_full_risk_table():
+def create_full_risk_table() -> pd.DataFrame:
     """
     Based on the data from load_client_data, finds the risks associated with all portfolios.
     Sources to be used are the cashrisks.csv spreadsheet, and the two APIs.
@@ -32,7 +33,7 @@ def create_full_risk_table():
     return client_df
 
 
-def calculate_hedge_ratio():
+def calculate_hedge_ratio() -> Dict:
     """
     Per client, calculates the hedge ratio (risk of all liabilities over risks of all assets).
     """
@@ -58,7 +59,7 @@ def calculate_hedge_ratio():
     return client_risk_all
 
 
-def _map_risk_data_for_all_pfs():
+def _map_risk_data_for_all_pfs() -> Dict:
     """
     Maps risks for all portfolios in the table
     """
@@ -88,7 +89,7 @@ def _map_risk_data_for_all_pfs():
     return risk_dict
 
 
-def _create_pf_type_dict():
+def _create_pf_type_dict() -> Dict:
     """
     Creates a dictionary that maps portfolio and its type/scope
     """
@@ -97,7 +98,7 @@ def _create_pf_type_dict():
     return pf_type_dict
 
 
-def _read_liability_risks():
+def _read_liability_risks() -> Dict:
     """
     Reads in risks for liability portfolios from cashrisks.csv file
     """
@@ -107,7 +108,7 @@ def _read_liability_risks():
     return liab_risk_dict
 
 
-def _get_risk_api(derivatives: bool = True):
+def _get_risk_api(derivatives: bool = True) -> Dict:
     """
     Gets risks of either derivatives assets or FX from api and maps the risks to the portfolios.
     """
