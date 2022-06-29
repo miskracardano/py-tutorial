@@ -9,7 +9,8 @@ Write a program to consolidate risk reporting for clients with assets under our 
 The program should perform the following:
 1. load all data from portfolios.xlsx. This represents the start of our report.
 2. based on the data from step 1. find the risks associated with all portfolios. Sources to be used are the cashrisks.csv spreadsheet, and the two APIs.
-3. per client, calculate the hedge ratio (risk of all liabilities over risks of all assets).
+3. per client, calculate the hedge ratio (risk of all assets over risks of all liabilities, in absolute value).
+4. display the results.
 
 Next to that, please make sure to accomplish the following:
 * write the most well-structured, production-like code you are able to - including documentation via docstrings.
@@ -18,5 +19,6 @@ Next to that, please make sure to accomplish the following:
 * make sure you work in your own virtual environment, with Python 3.7.10.
 
 *Assumptions.*
+* ./app/app.py has a main() function: this should represent the entry point of your program.
 * You are free to add as much code as needed to the /app folder, as long as you keep the app.py file.
 * The folders /api, /data, and the root folder should not be touched or modified in any way (except for the requirements.txt) file.
