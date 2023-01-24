@@ -31,26 +31,36 @@ def read_cashrisks_data(file: [str], header: [int]):
     Load cashrisks
     """
     cashrisks = pd.read_csv(file, header=header)
+    cashrisks = cashrisks[['portfolio', 'risk']]
 
     return cashrisks
 
 
-def get_risks(portfolio):
+def get_risks(portfolio, cashrisks):
     """
     Get risks for all portfolios
     """
-    risk_value_der = [{x: get_portfolio_der(x, date.today())['Value']} for x in (set(pd.Series(get_all_der()['Value'])) & set(portfolio.portfolio))]
-    risk_value_fx = [{x: get_portfolio_fx(x, date.today())['Value']} for x in (set(pd.Series(get_all_fx()['Value'])) & set(portfolio.portfolio))]
+    risk_value_der = [{'portfolio': x, 'risk': get_portfolio_der(x, date.today())['Value']} for x in
+                      (set(pd.Series(get_all_der()['Value'])) & set(portfolio.portfolio))]
+    risk_value_fx = [{'portfolio': x, 'risk': get_portfolio_fx(x, date.today())['Value']} for x in
+                     (set(pd.Series(get_all_fx()['Value'])) & set(portfolio.portfolio))]
 
-    return risk_value_der, risk_value_fx
+    risks_der_fx = pd.DataFrame.from_records(risk_value_der + risk_value_fx)
+    risks = pd.concat([risks_der_fx, cashrisks])
+    risk_portfolio = portfolio.merge(risks, how='left', on='portfolio')
 
-def add_risks(portfolio, risk_value_der, risk_value_fx, cashrisks):
+    return risk_portfolio
+
+
+def find_hedge_ratio(risk_portfolio):
     """
-    Add obtained risk info to portfolios dataframe
+    Find hedging ratio per client
     """
-    portfolio['risk'] =
+    hedge_ratio = risk_portfolio.groupby(by=['client'], dropna=True).apply(
+        lambda x: abs(x[~x['scope'].isin(['Liabilities'])]['risk'].sum()
+                      / x[x['scope'].isin(['Liabilities'])]['risk'].sum()))
 
-    return portfolio
+    return hedge_ratio
 
 
 def main():
@@ -60,12 +70,8 @@ def main():
     portfolio = read_portfolio_data('C:/Users/l.torn/PycharmProjects/py-tutorial/data/portfolios.xlsx', header=0)
     cashrisks = read_cashrisks_data('C:/Users/l.torn/PycharmProjects/py-tutorial/data/cashrisks.csv', header=0)
 
-    risk_value_der, risk_value_fx = get_risks(portfolio)
-    add_risks(portfolio, risk_value_der, risk_value_fx, cashrisks)
-
-
-
-    print(portfolio, cashrisks, risk_value_der, risk_value_fx)
+    risk_portfolio = get_risks(portfolio, cashrisks)
+    hedge_ratio = find_hedge_ratio(risk_portfolio)
 
     pass
 
