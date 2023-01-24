@@ -1,12 +1,5 @@
 import sys  # Keep at top to add to add root dir to PYTHONPATH.
 from pathlib import Path  # Keep at top to add to add root dir to PYTHONPATH.
-
-root = Path(__file__).parent.parent  # Keep at top to add to add root dir to PYTHONPATH.
-sys.path.append(str(root))  # Keep at top to add to add root dir to PYTHONPATH.
-
-# from app.read_data import read_portfolio_data
-# from app.read_data import read_cashrisks_data
-
 import pandas as pd
 from datetime import date
 from api.derivatives import get_all as get_all_der
@@ -14,8 +7,9 @@ from api.derivatives import get_portfolio as get_portfolio_der
 from api.fx import get_all as get_all_fx
 from api.fx import get_portfolio as get_portfolio_fx
 
+root = Path(__file__).parent.parent  # Keep at top to add to add root dir to PYTHONPATH.
+sys.path.append(str(root))  # Keep at top to add to add root dir to PYTHONPATH.
 
-# from .read_data import read_portfolio_data
 
 def read_portfolio_data(file: [str], header: [int]):
     """
@@ -63,6 +57,14 @@ def find_hedge_ratio(risk_portfolio):
     return hedge_ratio
 
 
+def display(risk_portfolio, hedge_ratio):
+    """
+    Display risks per portfolio and display hedge ratios
+    """
+    print(risk_portfolio)
+    print(hedge_ratio)
+
+
 def main():
     """
     Main entry point of app.
@@ -72,8 +74,7 @@ def main():
 
     risk_portfolio = get_risks(portfolio, cashrisks)
     hedge_ratio = find_hedge_ratio(risk_portfolio)
-
-    pass
+    display(risk_portfolio, hedge_ratio)
 
 
 if __name__ == '__main__':
