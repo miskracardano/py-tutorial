@@ -1,3 +1,11 @@
+"""
+The main goal of this script is to display risks and hedging ratios per client. This script combines data from various
+resources and calculates the corresponding hedge ratio per client. Finally, the risks associated with the portfolios and 
+the corresponding hedge ratios per client are displayed. 
+"""
+
+__author__ = "Linda Torn"
+
 import sys  # Keep at top to add to add root dir to PYTHONPATH.
 from pathlib import Path  # Keep at top to add to add root dir to PYTHONPATH.
 import pandas as pd
@@ -13,7 +21,11 @@ sys.path.append(str(root))  # Keep at top to add to add root dir to PYTHONPATH.
 
 def read_portfolio_data(file: [str], header: [int]):
     """
-    Read data portfolios
+    Read portfolio data form xlsx file.
+
+    :param file: portfolio.xlsx file
+    :param header: declare row used for column headers
+    :return: data from the portfolio.xlsx file
     """
     portfolios = pd.read_excel(file, header=header)
 
@@ -22,7 +34,11 @@ def read_portfolio_data(file: [str], header: [int]):
 
 def read_cashrisks_data(file: [str], header: [int]):
     """
-    Load cashrisks
+    Load cashrisks from csv file and extract useful information.
+
+    :param file: cashrisks.csv file
+    :param header: declare row used for column headers
+    :return: data from cashrisks.csv file
     """
     cashrisks = pd.read_csv(file, header=header)
     cashrisks = cashrisks[['portfolio', 'risk']]
@@ -32,7 +48,12 @@ def read_cashrisks_data(file: [str], header: [int]):
 
 def get_risks(portfolio, cashrisks):
     """
-    Get risks for all portfolios
+    Get risks for all portfolios using the input from :meth: `~api.derivatives.get_portfolio`,
+    :meth: `~api.fx.get_portfolio` the :meth: `read_portfolio_data` and :meth: `read_cashrisks_data`.
+
+    :param portfolio: info from portfolio file
+    :param cashrisks: info from cashrisks file
+    :return: portfolio data including risks per portfolio
     """
     risk_value_der = [{'portfolio': x, 'risk': get_portfolio_der(x, date.today())['Value']} for x in
                       (set(pd.Series(get_all_der()['Value'])) & set(portfolio.portfolio))]
@@ -48,7 +69,10 @@ def get_risks(portfolio, cashrisks):
 
 def find_hedge_ratio(risk_portfolio):
     """
-    Find hedging ratio per client
+    Find hedging ratio per client based on the output of :meth: `get_risks`.
+
+    :param risk_portfolio: output from :meth: `get risks`
+    :return: hedge ratio per client
     """
     hedge_ratio = risk_portfolio.groupby(by=['client'], dropna=True).apply(
         lambda x: abs(x[~x['scope'].isin(['Liabilities'])]['risk'].sum()
@@ -59,7 +83,10 @@ def find_hedge_ratio(risk_portfolio):
 
 def display(risk_portfolio, hedge_ratio):
     """
-    Display risks per portfolio and display hedge ratios
+    Display risks per portfolio and display hedge ratios.
+
+    :param risk_portfolio: output from :meth: `get_risks`
+    :param hedge_ratio: output from :meth: `find_hedge_ratio`
     """
     print(risk_portfolio)
     print(hedge_ratio)
