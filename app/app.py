@@ -1,7 +1,9 @@
 """
-The main goal of this script is to display risks and hedging ratios per client. This script combines data from various
-resources and calculates the corresponding hedge ratio per client. Finally, the risks associated with the portfolios and 
-the corresponding hedge ratios per client are displayed. 
+The main goal of this script is to display risks and hedging ratios per client.
+This script combines data from various resources and calculates the
+corresponding hedge ratio per client. Finally, the risks associated with
+the portfolios and the corresponding hedge ratios per client
+are displayed.
 """
 
 __author__ = "Linda Torn"
@@ -19,7 +21,7 @@ root = Path(__file__).parent.parent  # Keep at top to add to add root dir to PYT
 sys.path.append(str(root))  # Keep at top to add to add root dir to PYTHONPATH.
 
 
-def read_portfolio_data(file: [str], header: [int]):
+def read_portfolio_data(file: [str], header: [int]) -> [pd.DataFrame]:
     """
     Read portfolio data form xlsx file.
 
@@ -32,7 +34,7 @@ def read_portfolio_data(file: [str], header: [int]):
     return portfolios
 
 
-def read_cashrisks_data(file: [str], header: [int]):
+def read_cashrisks_data(file: [str], header: [int]) -> [pd.DataFrame]:
     """
     Load cashrisks from csv file and extract useful information.
 
@@ -46,10 +48,12 @@ def read_cashrisks_data(file: [str], header: [int]):
     return cashrisks
 
 
-def get_risks(portfolio, cashrisks):
+def get_risks(portfolio: [pd.DataFrame], cashrisks: [pd.DataFrame]) -> [pd.DataFrame]:
     """
-    Get risks for all portfolios using the input from :meth: `~api.derivatives.get_portfolio`,
-    :meth: `~api.fx.get_portfolio` the :meth: `read_portfolio_data` and :meth: `read_cashrisks_data`.
+    Get risks for all portfolios using the input from
+    :meth:`~api.derivatives.get_portfolio`,
+    :meth:`~api.fx.get_portfolio`
+    the :meth: `read_portfolio_data` and :meth:`read_cashrisks_data`.
 
     :param portfolio: info from portfolio file
     :param cashrisks: info from cashrisks file
@@ -67,11 +71,11 @@ def get_risks(portfolio, cashrisks):
     return risk_portfolio
 
 
-def find_hedge_ratio(risk_portfolio):
+def find_hedge_ratio(risk_portfolio: [pd.DataFrame]) -> [pd.Series]:
     """
-    Find hedging ratio per client based on the output of :meth: `get_risks`.
+    Find hedging ratio per client based on the output of :meth`get_risks`.
 
-    :param risk_portfolio: output from :meth: `get risks`
+    :param risk_portfolio: output from :meth:`get risks`
     :return: hedge ratio per client
     """
     hedge_ratio = risk_portfolio.groupby(by=['client'], dropna=True).apply(
@@ -81,12 +85,12 @@ def find_hedge_ratio(risk_portfolio):
     return hedge_ratio
 
 
-def display(risk_portfolio, hedge_ratio):
+def display(risk_portfolio: [pd.DataFrame], hedge_ratio: [pd.Series]):
     """
     Display risks per portfolio and display hedge ratios.
 
-    :param risk_portfolio: output from :meth: `get_risks`
-    :param hedge_ratio: output from :meth: `find_hedge_ratio`
+    :param risk_portfolio: output from :meth:`get_risks`
+    :param hedge_ratio: output from :meth:`find_hedge_ratio`
     """
     print(risk_portfolio)
     print(hedge_ratio)
