@@ -43,7 +43,6 @@ def read_cashrisks_data(file: [str], header: [int]) -> [pd.DataFrame]:
     :return: data from cashrisks.csv file
     """
     cashrisks = pd.read_csv(file, header=header)
-    cashrisks = cashrisks[['portfolio', 'risk']]
 
     return cashrisks
 
@@ -102,6 +101,7 @@ def main():
     """
     portfolio = read_portfolio_data('C:/Users/l.torn/PycharmProjects/py-tutorial/data/portfolios.xlsx', header=0)
     cashrisks = read_cashrisks_data('C:/Users/l.torn/PycharmProjects/py-tutorial/data/cashrisks.csv', header=0)
+    cashrisks = cashrisks[['portfolio', 'risk']]
 
     risk_portfolio = get_risks(portfolio, cashrisks)
     hedge_ratio = find_hedge_ratio(risk_portfolio)
