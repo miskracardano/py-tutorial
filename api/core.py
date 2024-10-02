@@ -1,7 +1,9 @@
-from typing import Any
+from typing import TypeAlias
+
+JsonDict: TypeAlias = dict[str, bool | int | str | list[str] | None]
 
 
-def parse_response(value: Any) -> dict[str, Any]:
+def parse_response(value: int | list[str]) -> JsonDict:
     return {
         "Success": True,
         "Error": None,
@@ -9,7 +11,7 @@ def parse_response(value: Any) -> dict[str, Any]:
     }
 
 
-def parse_error(error: str) -> dict[str, Any]:
+def parse_error(error: str) -> JsonDict:
     return {
         "Success": False,
         "Error": error,

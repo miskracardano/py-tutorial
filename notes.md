@@ -16,7 +16,7 @@ Next to that, please make sure to accomplish the following:
 * write the most well-structured, production-like code you are able to - including documentation via docstrings.
 * the code you write should be unit-tested.
 * add all dependencies necessary to the requirements.txt file (e.g. if you use pandas, please add it to the file).
-* make sure you work in your own virtual environment, with Python 3.7.10.
+* make sure you work in your own virtual environment, with Python 3.11.x.
 
 *Assumptions.*
 * ./app/app.py has a main() function: this should represent the entry point of your program.

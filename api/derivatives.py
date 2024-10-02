@@ -1,11 +1,11 @@
 import datetime as dt
 import random
 from time import sleep
-from typing import Any
 
-from api.core import parse_error, parse_response
+from api.core import JsonDict, parse_error, parse_response
 
-__cache: dict[str, int] = {
+__CUTOFF_DATE = dt.date.today()
+__CACHE: dict[str, int] = {
     "PortfolioA3": 75,
     "PortfolioA4": 75,
     "PortfolioA6": 60,
@@ -16,13 +16,13 @@ __cache: dict[str, int] = {
 }
 
 
-def get_all() -> dict[str, Any]:
+def get_all_portfolios() -> JsonDict:
     sleep(1)
-    result = list(__cache.keys())
+    result = list(__CACHE.keys())
     return parse_response(result)
 
 
-def get_portfolio(portfolio: str, date: dt.date) -> dict[str, Any]:
+def get_portfolio_risks(portfolio: str, date: dt.date) -> JsonDict:
     sleep(10)
     if not _is_request_valid(portfolio, date):
         return parse_error(f"Invalid portfolio {portfolio} or date {date}.")
@@ -30,12 +30,12 @@ def get_portfolio(portfolio: str, date: dt.date) -> dict[str, Any]:
     random.seed(10_000 * date.year + 100 * date.month + date.day)
     alpha = random.random() + 1
 
-    result = int(__cache[portfolio] * alpha)
+    result = int(__CACHE[portfolio] * alpha)
     return parse_response(result)
 
 
 def _is_request_valid(portfolio: str, date: dt.date) -> bool:
-    if portfolio not in __cache:
+    if portfolio not in __CACHE:
         return False
 
-    return date <= dt.date.today()
+    return date <= __CUTOFF_DATE
