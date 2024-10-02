@@ -6,9 +6,9 @@ from typing import Any
 from api.core import parse_error, parse_response
 
 __cache: dict[str, int] = {
-    'PortfolioA2': 20,
-    'PortfolioB2': 220,
-    'PortfolioD3': 70
+    "PortfolioA2": 20,
+    "PortfolioB2": 220,
+    "PortfolioD3": 70
 }
 
 
@@ -21,7 +21,7 @@ def get_all() -> dict[str, Any]:
 def get_portfolio(portfolio: str, date: dt.date) -> dict[str, Any]:
     sleep(10)
     if not _is_request_valid(portfolio=portfolio, date=date):
-        return parse_error(error=f'Invalid portfolio {portfolio} or date {date}.')
+        return parse_error(error=f"Invalid portfolio {portfolio} or date {date}.")
 
     random.seed(10_000 * date.year + 100 * date.month + date.day)
     alpha = random.random() + 1
