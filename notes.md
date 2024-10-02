@@ -1,4 +1,4 @@
-*Assignment.*
+**Assignment.**
 
 Write a program to consolidate risk reporting for clients with assets under our management. There are a few sources to query for the required data:
 1. portfolios.xlsx: spreadsheet containing all clients and their portfolio data.
