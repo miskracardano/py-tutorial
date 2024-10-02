@@ -1,7 +1,7 @@
-from typing import Any, Dict
+from typing import Any
 
 
-def parse_response(value: Any) -> Dict[str, Any]:
+def parse_response(value: Any) -> dict[str, Any]:
     return {
         'Success': True,
         'Error': None,
@@ -9,7 +9,7 @@ def parse_response(value: Any) -> Dict[str, Any]:
     }
 
 
-def parse_error(error: str) -> Dict[str, Any]:
+def parse_error(error: str) -> dict[str, Any]:
     return {
         'Success': False,
         'Error': error,
