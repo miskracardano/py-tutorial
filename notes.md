@@ -1,6 +1,8 @@
 **Assignment.**
 
-Write a program to consolidate risk reporting for clients with assets under our management. There are a few sources to query for the required data:
+Write a program to consolidate risk reporting for clients with assets under our management, for a date before today.
+
+There are a few sources to query for the required data:
 1. portfolios.xlsx: spreadsheet containing all clients and their portfolio data.
 2. cashrisks.csv: text file containing risks associated to cash portfolio, i.e. liabilities.
 3. fx API: API with available risk data for FX portfolios.
@@ -8,9 +10,9 @@ Write a program to consolidate risk reporting for clients with assets under our 
 
 The program should perform the following:
 1. load all data from portfolios.xlsx. This represents the start of our report.
-2. based on the data from step 1. find the risks associated with all portfolios. Sources to be used are the cashrisks.csv spreadsheet, and the two APIs.
+2. based on the data from step 1., find the risks associated with all portfolios. Sources to be used are the cashrisks.csv spreadsheet, and the two APIs.
 3. per client, calculate the hedge ratio (risk of all assets over risks of all liabilities, in absolute value).
-4. display the results.
+4. display the results in a manner of your choosing.
 
 Next to that, please make sure to accomplish the following:
 * write the most well-structured, production-like code you are able to - including documentation via docstrings.
