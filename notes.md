@@ -22,6 +22,9 @@ There are a few sources of data to query for the required data:
 4. derivatives API: API with available risk data for derivatives portfolios.
 
 ## Assumptions.
+* Do not modify the folder structure as provided to you.
 * .src/app/app.py has a main() function: this represents the entry point of your program.
-* You are free to add as much code as needed to the ./src folder, as long as you keep the ./app/app.py file.
-* The folders ./api, ./resources, and the root folder itself should not be touched or modified in any way (except for the requirements.txt file).
+* You are free to add as much code as needed to the ./src folder, as long as you keep the ./app/app.py file with the structure it has (only modify the main() function).
+* Unit tests should be added to the ./tests folder.
+* requirements.txt can be updated as needed.
+* The folders ./api, ./resources, and the root folder itself should not be touched or modified in any way.
