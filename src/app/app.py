@@ -126,6 +126,15 @@ def import_and_merge(data: str, cashrisk: str, derivatives: str, fx: str, yester
 
 
 def calculate_hedge(df: pd.DataFrame):
+    """
+    Calculates the hedge ratio for each client by summing asset and liability values.
+
+    Args:
+        df (pd.DataFrame): DataFrame containing columns 'scope', 'client', 'size', 'risk', 'derivatives', and 'fx'.
+
+    Returns:
+        pd.DataFrame: DataFrame with hedge ratio
+    """
     assets = df[df["scope"] != "Liabilities"]
     grouped_assets_sum = assets.groupby("client")[["size", "risk", "derivatives", "fx"]].sum()
     grouped_assets_sum["sum"] = grouped_assets_sum[["risk", "derivatives", "fx"]].sum(axis=1)
@@ -136,7 +145,6 @@ def calculate_hedge(df: pd.DataFrame):
 
     grouped_sum = grouped_assets_sum.join(grouped_liabilities_sum, lsuffix="_assets", rsuffix="_liabilities")
     grouped_sum["hedge"] = abs(grouped_sum["sum_assets"] / grouped_sum["sum_liabilities"])
-    grouped_sum.sort_values(by="hedge", ascending=False, inplace=True)
     return grouped_sum
 
 
