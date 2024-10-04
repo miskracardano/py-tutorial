@@ -1,7 +1,7 @@
 import datetime as dt
 import logging
-
 import pandas as pd
+
 import api.derivatives as derivatives_api
 import api.fx as fx_api
 
@@ -17,9 +17,9 @@ def run_py_tutorial(file_path_xlsx: str, file_path_csv: str, yesterday: dt.date)
     """
     df = import_and_merge(data=file_path_xlsx, cashrisk=file_path_csv, derivatives="derivatives",
                           fx="fx", yesterday=yesterday)
-    print(df)
+    df.to_excel("portfolios.xlsx")
     hedge = calculate_hedge(df)
-    print(hedge)
+    hedge.to_excel("hedge_ratios.xlsx")
 
 
 def main():
@@ -121,17 +121,17 @@ def import_and_merge(data: str, cashrisk: str, derivatives: str, fx: str, yester
 
 
 def calculate_hedge(df: pd.DataFrame):
-    assets = df[df['scope'] != 'Liabilities']
-    grouped_assets_sum = assets.groupby('client')[['size', 'risk', 'derivatives', 'fx']].sum()
-    grouped_assets_sum['sum'] = grouped_assets_sum[['risk', 'derivatives', 'fx']].sum(axis=1)
+    assets = df[df["scope"] != "Liabilities"]
+    grouped_assets_sum = assets.groupby("client")[["size", "risk", "derivatives", "fx"]].sum()
+    grouped_assets_sum["sum"] = grouped_assets_sum[["risk", "derivatives", "fx"]].sum(axis=1)
 
-    liabilities = df[df['scope'] == 'Liabilities']
-    grouped_liabilities_sum = liabilities.groupby('client')[['size', 'risk']].sum()
-    grouped_liabilities_sum['sum'] = grouped_liabilities_sum['risk']
+    liabilities = df[df["scope"] == "Liabilities"]
+    grouped_liabilities_sum = liabilities.groupby("client")[["size", "risk"]].sum()
+    grouped_liabilities_sum["sum"] = grouped_liabilities_sum["risk"]
 
-    grouped_sum = grouped_assets_sum.join(grouped_liabilities_sum, lsuffix='_assets', rsuffix='_liabilities')
-    grouped_sum['hedge'] = grouped_sum['sum_assets'] / grouped_sum['sum_liabilities']
-    grouped_sum.sort_values(by='hedge', ascending=False, inplace=True)
+    grouped_sum = grouped_assets_sum.join(grouped_liabilities_sum, lsuffix="_assets", rsuffix="_liabilities")
+    grouped_sum["hedge"] = abs(grouped_sum["sum_assets"] / grouped_sum["sum_liabilities"])
+    grouped_sum.sort_values(by="hedge", ascending=False, inplace=True)
     return grouped_sum
 
 
