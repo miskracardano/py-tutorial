@@ -8,12 +8,17 @@ import api.fx as fx_api
 
 def run_py_tutorial(file_path_xlsx: str, file_path_csv: str, yesterday: dt.date):
     """
-    Imports and merges data from different sources, then prints the resulting DataFrame.
+    Runs the Python tutorial for merging and analyzing financial data. The function performs the following tasks:
+
+    1. Imports and merges data from the provided Excel and CSV files.
+    2. Outputs the merged data to an Excel file named 'portfolios.xlsx'.
+    3. Calculates the hedge ratios from the merged data.
+    4. Outputs the hedge ratios to an Excel file named 'hedge_ratios.xlsx'.
 
     Args:
-        file_path_xlsx (str): The file path to the Excel file containing the main data.
-        file_path_csv (str): The file path to the CSV file containing the cash risk data.
-        yesterday (dt.date): The date object representing the 'yesterday' date for processing.
+        file_path_xlsx (str): The path to the Excel file containing the main data.
+        file_path_csv (str): The path to the CSV file containing cash risk and derivative data.
+        yesterday (dt.date): The date for which the data is relevant.
     """
     df = import_and_merge(data=file_path_xlsx, cashrisk=file_path_csv, derivatives="derivatives",
                           fx="fx", yesterday=yesterday)
